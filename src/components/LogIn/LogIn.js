@@ -26,6 +26,7 @@ function LogIn() {
   initializeLogInFramework();
 
   // Context Api
+  // eslint-disable-next-line
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   //

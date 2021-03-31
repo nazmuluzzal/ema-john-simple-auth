@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fakeData from "../../fakeData";
+
 import {
   getDatabaseCart,
   processOrder,
@@ -12,6 +12,7 @@ import { useHistory } from "react-router";
 
 const Review = () => {
   const [cart, setCart] = useState([]);
+  // eslint-disable-next-line
   const [orderPlaced, setOrderPlaced] = useState(false);
   const history = useHistory();
 
@@ -32,16 +33,26 @@ const Review = () => {
   };
 
   useEffect(() => {
+    // cart
     const savedCart = getDatabaseCart();
     const productkeys = Object.keys(savedCart);
-    //const counts = Object.values(savedCart);
-    const cartProducts = productkeys.map((key) => {
-      const product = fakeData.find((pd) => pd.key === key);
-      product.quantity = savedCart[key];
-      return product;
-    });
+    fetch("http://localhost:5000/productsByKeys", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(productkeys),
+    })
+      .then((res) => res.json())
+      .then((data) => setCart(data));
 
-    setCart(cartProducts);
+    //
+    //const counts = Object.values(savedCart);
+    // const cartProducts = productkeys.map((key) => {
+    //   const product = fakeData.find((pd) => pd.key === key);
+    //   product.quantity = savedCart[key];
+    //   return product;
+    // });
+
+    // setCart(cartProducts);
   }, []);
 
   let thankYou;
